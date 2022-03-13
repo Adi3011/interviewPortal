@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <title>Interview Portal</title>
+  </head>
+  <body onload='autoClick()';>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Interview Portal</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li role="button" class="nav-item">
+              <a
+              id="pg"
+                class="nav-link active"
+                aria-current="page"
+                onclick="document.getElementById('schedule').classList.add('d-none');document.getElementById('page').classList.remove('d-none');
+                document.getElementById('updateschedule').classList.add('d-none');document.getElementById('sc').classList.remove('active');document.getElementById('pg').classList.add('active')"
+                >Home</a
+              >
+            </li>
+            <li role="button" class="nav-item">
+              <a id="sc" class="nav-link" onclick="document.getElementById('schedule').classList.remove('d-none');document.getElementById('page').classList.add('d-none');document.getElementById('updateschedule').classList.add('d-none');document.getElementById('sc').classList.add('active');document.getElementById('pg').classList.remove('active')">Schedule Interview</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Home -->
+    <div id="page" style="margin-top: 100px;">
+      <div class="mx-5 px-5">
+        <div class="mx-5">
+          <div class="container">
+            <div class="row mt-3">
+              <div class="col-12 d-flex flex-wrap justify-content-center">
+                {% if interviews|length >0 %}
+                  {% for interview in interviews %}
+                  <div class="card m-2" style="width: 30rem">
+                    <div class="card-header" style="background-color: #9999ff;">
+                      {{ interview[1] }} 
+                    </div>
+                    <div class="card-body">
+                      <h6 class="card-subtitle mb-2 text-muted">
+                        {{ interview[6] }}
+                      </h6>
+                      <div class="card-text d-flex flex-column py-2">
+                        <div class="d-flex">
+                          <b>Start Time: </b>
+                          {{ interview[7] }}
+                        </div>
+                        <div>
+                          <b>End Time: </b>
+                          {{ interview[8] }}
+                        </div>
+                         <div>
+                          <b>InterViewer </b>
+                          {{ interview[2] }} 
+                        </div>
+                        <div>
+                          <b>InterViewer Email </b>
+                          {{ interview[4]}}
+                        </div>
+                         <div>
+                          <b>InterViewee </b>
+                          {{ interview[3] }}
+                        </div>
+                        <div>
+                          <b>InterViewee Email </b>
+                          {{ interview[5]}}
+                        </div>
+
+                      </div>
+                      <div class="d-flex justify-content-center py-2">
+
+                        <button id="up" class='btn btn-sm btn-secondary' onclick="myfunction({{ interview[0]-1 }})">Update</button>
+                      </div>
+                    </div>
+                  </div>
+                  {% endfor %}
+                {% else %}
+                <h7> No interviews scheduled </h7>
+                {% endif %}  
+
+              </div>
+            </div>
+          </div>
+          <!-- ) : (
+          "Nothing Here!"
+        )} -->
+        </div>
+      </div>
+    </div>
+    <div id="schedule" class = "d-none" style="margin-top: 100px;">
+      <div class="mx-5 px-5">
+        <Navbar scheduleActive />
+        <div class="container">
+          <div class="row">
+            <div class="col-8 offset-2">
+              <form class="row p-3" action="{{ url_for('schedule') }}" enctype=multipart/form-data method="post">
+                <h5 class="pb-3">Schedule an Interview</h5>
+
+                <div class="form-group py-2">
+                  <input
+                    type="text"
+                    class="form-control"
+                    name="name"
+  
+                    placeholder="Interview Name"
+                    required
+                  />
+                </div>
+                <div class="form-group py-2">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">Date</div>
+                    </div>
+                    <input
+                      type="date"
+                      class="form-control"
+                      name="date"
+                      id="date"
+                     
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="form-group py-2">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">Start Time</div>
+                    </div>
+                    <input
+                      type="time"
+                      class="form-control"
+                      name="startTime"
+                      id="startTime"
+                     
+                      placeholder="Start Time"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="form-group py-2">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">End Time</div>
+                    </div>
+                    <input
+                      type="time"
+                      class="form-control"
+                      name="endTime"
+                      id="endTime"
+                      
+                      placeholder="End Time"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="form-group py-2">
+                  <div class="input-group">
+                    <select name="interviewername" class="form-select">
+                      <option value="Participants">Interviewer Name</option>
+                      {% for interviewer in interviewers %}
+                      <option value="{{ interviewer[0] }}" key="{key}">
+                        {{ interviewer[0] }}   ({{ interviewer[1] }})
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                 <div class="form-group py-2">
+                  <div class="input-group">
+                    <select name="intervieweremail" class="form-select">
+                      <option value="Participants">Interviewer Email</option>
+                      {% for interviewer in interviewers %}
+                      <option value="{{ interviewer[1] }}" key="{key}">
+                        {{ interviewer[1] }}  ({{ interviewer[0] }})
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group py-2">
+            <div
+              onclick="document.getElementById('candidatesName').classList.toggle('d-none')"
+              id="candidatesToggler"
+              role="button"
+              class="border rounded py-1 px-2"
+            >
+              Interviewee Names
+            </div>
+            <select
+              id="candidatesName"
+              name="candidatesName"
+              class="form-select d-none"
+              size="number_of_options"
+              multiple
+            >
+              {% for participant in participants %}
+              <option value="{{ participant[0] }}" key="{key}">
+                {{ participant[0] }} ({{ participant[1] }})
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+                 <div class="form-group py-2">
+            <div
+              onclick="document.getElementById('candidates').classList.toggle('d-none')"
+              id="candidatesToggler"
+              role="button"
+              class="border rounded py-1 px-2"
+            >
+              Interviewee Mails
+            </div>
+            <select
+              id="candidates"
+              name="candidatesEmail"
+              class="form-select d-none"
+              size="number_of_options"
+              multiple
+            >
+              {% for participant in participants %}
+              <option value="{{ participant[1] }}" key="{key}">
+                {{ participant[1] }} ({{ participant[0] }})
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+           <div class="form-group py-2">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div></div>
+                    </div>
+                   <p>
+                      {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                          <li>{{ message }}</li>
+                          <a id='linkToClick'  onclick="document.getElementById('schedule').classList.remove('d-none');document.getElementById('page').classList.add('d-none');document.getElementById('sc').classList.add('active');document.getElementById('pg').classList.remove('active')"></a>
+                        {% endfor %}
+                        </ul>
+                        {% endif %}
+                      {% endwith %}
+                  </p>
+                  </div>
+                </div>
+                
+                
+                <div class="d-flex justify-content-between">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-danger">Discard</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="updateschedule" class = "d-none" style="margin-top: 100px;">
+      <div class="mx-5 px-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-8 offset-2">
+              <form class="row p-3" action="{{ url_for('update') }}" enctype=multipart/form-data method="post">
+                <input name="_id" id="index" class="d-none"></input>
+                <h5 class="pb-3">Update an Interview</h5>
+
+                <div class="form-group py-2">
+                  <input
+                    type="text"
+                    id="uname"
+                    class="form-control"
+                    name="uname"
+                    
+                    placeholder="Interview Name"
+                    required
+                  />
+                </div>
+                <div class="form-group py-2">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">Date</div>
+                    </div>
+                    <input
+                      type="date"
+                      class="form-control"
+                      name="udate"
+                      id="udate"
+                      
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="form-group py-2">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">Start Time</div>
+                    </div>
+                    <input
+                      type="time"
+                      class="form-control"
+                      name="ustartTime"
+                      id="ustartTime"
+                      
+                      placeholder="Start Time"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="form-group py-2">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">End Time</div>
+                    </div>
+                    <input
+                      type="time"
+                      class="form-control"
+                      name="uendTime"
+                      id="uendTime"
+                      
+                      placeholder="End Time"
+                      required
+                    />
+                  </div>
+                </div>
+                <div class="form-group py-2">
+                  <div class="input-group">
+                    <select id="uinterviewername" name="uinterviewername" class="form-select">
+                      <option value="Participants">Interviewer Name</option>
+                      {% for interviewer in interviewers %}
+                      <option value="{{ interviewer[1] }}" key="{key}">
+                        {{ interviewer[0] }}   ({{ interviewer[1] }})
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                 <div class="form-group py-2">
+                  <div class="input-group">
+                    <select id="uintervieweremail" name="uintervieweremail" class="form-select">
+                      <option value="Participants">Interviewer Email</option>
+                      {% for interviewer in interviewers %}
+                      <option value="{{ interviewer[1] }}" key="{key}">
+                        {{ interviewer[1] }}  ({{ interviewer[0] }})
+                      </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group py-2">
+            <div
+              onclick="document.getElementById('ucandidatesName').classList.toggle('d-none')"
+              id="candidatesToggler"
+              role="button"
+              class="border rounded py-1 px-2"
+            >
+              Interviewee Names
+            </div>
+            <select
+              id="ucandidatesName"
+              name="ucandidatesName"
+              class="form-select d-none"
+              size="number_of_options"
+              multiple
+            >
+              {% for participant in participants %}
+              <option value="{{ participant[1] }}" key="{key}">
+                {{ participant[0] }} ({{ participant[1] }})
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+                 <div class="form-group py-2">
+            <div
+              onclick="document.getElementById('ucandidates').classList.toggle('d-none')"
+              id="candidatesToggler"
+              role="button"
+              class="border rounded py-1 px-2"
+            >
+              Interviewee Mails
+            </div>
+            <select
+              id="ucandidates"
+              name="ucandidates"
+              class="form-select d-none"
+              size="number_of_options"
+              multiple
+            >
+              {% for participant in participants %}
+              <option value="{{ participant[1] }}" key="{key}">
+                {{ participant[1] }} ({{ participant[0] }})
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+           <div class="form-group py-2">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div></div>
+                    </div>
+                   <p>
+                      {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <ul class=flashes>
+                        {% for message in messages %}
+                          <li>{{ message }}</li>
+                          <a id='linkToClick'  onclick="document.getElementById('updateschedule').classList.remove('d-none');document.getElementById('page').classList.add('d-none')"></a>
+                        {% endfor %}
+                        </ul>
+                        {% endif %}
+                      {% endwith %}
+                  </p>
+                  </div>
+                </div>
+                
+                
+                <div class="d-flex justify-content-between">
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="reset" class="btn btn-danger">Discard</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+    <script >
+      function autoClick(){
+        if("{{ flag|safe }}"){
+          document.getElementById('up').click();
+        }
+
+        document.getElementById('linkToClick').click();
+          }
+
+      function myfunction(idx)
+      {
+        document.getElementById('updateschedule').classList.remove('d-none');document.getElementById('page').classList.add('d-none')
+        console.log(idx)
+        console.log('{{ jsonInterviews|safe }}')
+        let data = '{{ jsonInterviews|safe }}'
+        data=JSON.parse(data)
+        console.log(data)
+        var index=document.getElementById('index')
+        index.value=idx
+        var interviewName= document.getElementById('uname')
+        var date= document.getElementById('udate')
+        var startTime = document.getElementById('ustartTime')
+        var endTime = document.getElementById('uendTime')
+        var interviewername = document.getElementById('uinterviewername')
+        var intervieweremail = document.getElementById('uintervieweremail')
+        var intervieweeNames =document.getElementById('ucandidatesName')
+        var intervieweeEmail = document.getElementById('ucandidates')
+
+        interviewName.value = data[idx][1]
+        var dateArray = data[idx][6].split('-')
+        var myDate = dateArray[2]+'-'+dateArray[1]+'-'+dateArray[0]
+        date.value= myDate
+
+
+        startTime.value = data[idx][7].split(' ')[0]
+        endTime.value = data[idx][8].split(' ')[0]
+
+        interviewername.value =data[idx][4]
+        intervieweremail.value=data[idx][4]
+        console.log(data[idx][3].split(','))
+
+        intervieweeNames.value =data[idx][5].split(',')
+        intervieweeEmail.value =data[idx][5].split(',')
+
+        console.log(data[idx][2])
+        console.log(data[idx][4])
+
+
+        
+      }
+    </script>
+
+    
+  </body>
+</html>
