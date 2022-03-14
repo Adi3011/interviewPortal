@@ -17,11 +17,31 @@ with sqlite3.connect("portal.db") as conn:
 	query = """ INSERT into participants (name,email_id) VALUES ("Aman","19bcs1087@gmail.com")"""
 	c.execute(query)
 
+	query = """ INSERT into participants (name,email_id) VALUES ("Aman","19bcs1089@gmail.com")"""
+	c.execute(query)
+	query = """ INSERT into participants (name,email_id) VALUES ("Anish","19bcs1010@gmail.com")"""
+	c.execute(query)
+	query = """ INSERT into participants (name,email_id) VALUES ("Amit","19bcs1187@gmail.com")"""
+	c.execute(query)
+	query = """ INSERT into participants (name,email_id) VALUES ("Amitesh","19bcs1000@gmail.com")"""
+	c.execute(query)
+	query = """ INSERT into participants (name,email_id) VALUES ("Anna","19bcs1092@gmail.com")"""
+	c.execute(query)
+	query = """ INSERT into participants (name,email_id) VALUES ("Anushi","19bcs1023@gmail.com")"""
+	c.execute(query)
+
 	query = """ INSERT into interviewers (name,email_id) VALUES ("Anubhav","anubhav@gmail.com")"""
 	c.execute(query)
 	query = """ INSERT into interviewers (name,email_id) VALUES ("Anirudh","anirudh@gmail.com")"""
 	c.execute(query)
 	query = """ INSERT into interviewers (name,email_id) VALUES ("Animesh","Animesh@gmail.com")"""
+	c.execute(query)
+
+	query = """ INSERT into interviewers (name,email_id) VALUES ("Animesh","animesh@gmail.com")"""
+	c.execute(query)
+	query = """ INSERT into interviewers (name,email_id) VALUES ("Anushree","anushreeh@gmail.com")"""
+	c.execute(query)
+	query = """ INSERT into interviewers (name,email_id) VALUES ("Anamika","Anamika@gmail.com")"""
 	c.execute(query)
 	# c.execute(query2)
 	# c.execute(query3)
