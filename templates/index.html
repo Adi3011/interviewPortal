@@ -386,7 +386,7 @@
               multiple
             >
               {% for participant in participants %}
-              <option value="{{ participant[1] }}" key="{key}">
+              <option value="{{ participant[0] }}" key="{key}">
                 {{ participant[0] }} ({{ participant[1] }})
               </option>
               {% endfor %}
@@ -493,7 +493,7 @@
         intervieweremail.value=data[idx][4]
         console.log(data[idx][3].split(','))
 
-        intervieweeNames.value =data[idx][5].split(',')
+        intervieweeNames.value =data[idx][3].split(',')
         intervieweeEmail.value =data[idx][5].split(',')
 
         console.log(data[idx][2])
